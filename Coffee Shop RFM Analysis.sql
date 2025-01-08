@@ -12,7 +12,7 @@ last_transaction AS (
 	SELECT
     MAX(transaction_date) AS overall_last_transaction
     FROM coffee.transaction_data
-    where customer_id > 0),
+    WHERE customer_id > 0),
 rfm_value AS(
 	SELECT
 		n.id_customer,
@@ -27,9 +27,9 @@ rfm_value AS(
 rfm_score AS(
 	SELECT
 		*,
-		ntile(3) over (order by recency) AS R_score,
-		ntile(3) over (order by frequency) AS F_score,
-		ntile(3) over (order by monetary) AS M_score
+		NTILE(3) OVER (ORDER BY recency) AS R_score,
+		NTILE(3) OVER (ORDER BY frequency) AS F_score,
+		NTILE(3) OVER (ORDER BY monetary) AS M_score
 	FROM rfm_value),
 rfm AS(
 	SELECT
@@ -40,16 +40,16 @@ rfm AS(
 SELECT
     *,
     CASE
-         when RFM_score in (222) then 'About to Sleep'
-		 when RFM_score in (213, 221) then 'At Risk'
-		 when RFM_score in (212, 211) then 'Cant Lose Them'
-		 when RFM_score in (333) then 'Champions'
-		 when RFM_score in (232, 223, 231) then 'Customers Needing Attention'
-         when RFM_score in (132, 123, 131, 122, 113, 121, 112) then 'Hibernating'
-         when RFM_score in (111) then 'Lost'
-         when RFM_score in (332) then 'Loyal Customers'
-         when RFM_score in (323) then 'Potential Loyalist'
-         when RFM_score in (233, 133) then 'Promising'
-         when RFM_score in (331, 322, 313, 321, 312, 311) then 'Recent Customers'
+         WHEN RFM_score IN (222) THEN 'About to Sleep'
+		 WHEN RFM_score IN (213, 221) THEN 'At Risk'
+		 WHEN RFM_score IN (212, 211) THEN 'Cant Lose Them'
+		 WHEN RFM_score IN (333) THEN 'Champions'
+		 WHEN RFM_score IN (232, 223, 231) THEN 'Customers Needing Attention'
+         WHEN RFM_score IN (132, 123, 131, 122, 113, 121, 112) THEN 'Hibernating'
+         WHEN RFM_score IN (111) THEN 'Lost'
+         WHEN RFM_score IN (332) THEN 'Loyal Customers'
+         WHEN RFM_score IN (323) THEN 'Potential Loyalist'
+         WHEN RFM_score IN (233, 133) THEN 'Promising'
+         WHEN RFM_score IN (331, 322, 313, 321, 312, 311) THEN 'Recent Customers'
     END AS customer_segment
 FROM rfm;
